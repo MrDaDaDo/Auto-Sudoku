@@ -1,4 +1,4 @@
-const DIFFS = ['easy', 'medium', 'hard', 'expert', 'custom'];
+const DIFFS = ['beginner', 'easy', 'medium', 'hard', 'expert', 'hell', 'custom'];
 const SETTINGS_KEY = 'sudokuSettings';
 const BEST_KEY = 'sudokuBest';
 const STATS_KEY = 'sudokuStats';

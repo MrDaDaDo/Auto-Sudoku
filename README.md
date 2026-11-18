@@ -25,7 +25,7 @@ A dependency-free browser version of **Sudoku** with a built-in **AI solver** th
 
 ## Features
 
-- **Classic Sudoku gameplay**: Easy, Medium, Hard and Expert puzzles, generated on the fly; every puzzle has exactly one solution and can be solved by logic alone
+- **Six difficulty levels**, from Beginner to Hell, generated on the fly; every puzzle has exactly one solution, and everything up to Expert can be solved by logic alone
 - **Mouse, keyboard and touch controls**: click a cell and type **1–9** or use the number pad; arrow keys to move, **Backspace** to erase, **N** for notes, **Ctrl+Z** to undo, **F2** for a new game
 - **Notes**: pencil in candidates by hand, or turn on **Show candidates** to fill them in automatically
 - **AI Autoplay**: lets the AI fill the grid one cell at a time and shows which technique each move needed
@@ -64,7 +64,7 @@ Singles place a digit; the other techniques only remove candidates, and the solv
 
 <img src="assets/screenshot.png" alt="An Expert puzzle mid-solve, right after an XY-Wing move" width="400">
 
-If logic runs out (which can happen on a **custom puzzle**), the solver falls back to a **backtracking search** that always branches on the cell with the fewest candidates, and the move is labelled *Trial and error*. The same search checks that a custom puzzle has exactly one solution before the game starts.
+If logic runs out (which happens on **Hell** puzzles and can happen on a **custom puzzle**), the solver falls back to a **backtracking search** that always branches on the cell with the fewest candidates, and the move is labelled *Trial and error*. The same search checks that a custom puzzle has exactly one solution before the game starts.
 
 ### Puzzle generation
 
@@ -72,16 +72,20 @@ If logic runs out (which can happen on a **custom puzzle**), the solver falls ba
 2. Remove digits in random order, two at a time (point-symmetric), keeping a removal only if the puzzle can still be solved by the techniques allowed for the chosen difficulty. A puzzle that logic can finish has exactly one solution.
 3. Grade the result by the hardest technique it needs, and retry until it matches the difficulty.
 
+**Hell** is generated differently: digits are removed one at a time with no symmetry, keeping a removal as long as the solution stays unique, and the puzzle is accepted only if the techniques above get stuck with at least 40 cells still empty.
+
 Measured over 300 generated puzzles per difficulty:
 
 | Difficulty | Techniques needed | Average givens | Average time to generate |
 | --- | --- | --- | --- |
+| Beginner | Level 1 | 45 | 1 ms |
 | Easy | Level 1 | 37 | 2 ms |
 | Medium | Level 1 | 28 | 5 ms |
-| Hard | Level 2 | 27 | 61 ms |
-| Expert | Level 3 | 28 | 141 ms |
+| Hard | Level 2 | 27 | 55 ms |
+| Expert | Level 3 | 28 | 142 ms |
+| Hell | Beyond level 3 (trial and error) | 24 | 17 ms |
 
-All 1,200 puzzles had exactly one solution, and the AI solved every one without falling back to search.
+All 1,800 puzzles had exactly one solution. The AI solved every Beginner to Expert puzzle without falling back to search, and needed about two trial-and-error moves per Hell puzzle on average.
 
 ## Project Structure
 

@@ -24,7 +24,7 @@
   "@type": "WebApplication",
   "name": "Auto-Sudoku",
   "url": "https://mrdadado.github.io/Auto-Sudoku/",
-  "description": "Play Sudoku online, or watch an AI solve it step by step. Includes hints, four difficulty levels and a solver for your own puzzles.",
+  "description": "Play Sudoku online, or watch an AI solve it step by step. Includes hints, six difficulty levels from Beginner to Hell and a solver for your own puzzles.",
   "applicationCategory": "GameApplication",
   "genre": "Puzzle",
   "operatingSystem": "Any",
@@ -73,6 +73,7 @@
   select { cursor: pointer; }
 
   .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .toolbar > label { font-weight: bold; }
   .custom { display: none; gap: 6px; align-items: center; flex: 1; min-width: 0; }
   .custom.show { display: flex; }
   .custom input { flex: 1; min-width: 0; }
@@ -190,7 +191,8 @@
     </div>
   </div>
   <div class="toolbar">
-    <select id="diffSelect" aria-label="Difficulty"></select>
+    <label for="diffSelect" data-i18n="difficulty">Difficulty</label>
+    <select id="diffSelect"></select>
     <div class="custom" id="customBox">
       <input type="text" id="customInput" inputmode="numeric" autocomplete="off" spellcheck="false">
       <button id="loadCustom" data-i18n="load">Load</button>

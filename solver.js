@@ -305,7 +305,8 @@ const Solver = (() => {
     for (const [i, mask] of elim) s.cand[i] &= ~mask;
   }
 
-  // 只用邏輯技巧解題，回傳所需的最高技巧等級（解不完則為 SEARCH_LEVEL）與各技巧使用次數
+  // 只用邏輯技巧解題，回傳所需的最高技巧等級（解不完則為 SEARCH_LEVEL）、各技巧使用次數，
+  // 以及邏輯推不下去時還剩幾個空格（stuck，越多代表越難）
   function grade(puzzle) {
     const s = makeState(puzzle);
     const techs = {};
@@ -318,8 +319,9 @@ const Solver = (() => {
       if (step.elim) applyElim(s, step.elim);
       else place(s, step.cell, step.digit);
     }
-    const solved = s.g.every(v => v);
-    return { level: solved ? level : SEARCH_LEVEL, solved, techs };
+    let stuck = 0;
+    for (let i = 0; i < 81; i++) if (!s.g[i]) stuck++;
+    return { level: stuck ? SEARCH_LEVEL : level, solved: !stuck, techs, stuck };
   }
 
   // 下一個要填的格子與數字。tech 為過程中用到的最難技巧；邏輯推不出來時改用回溯搜尋（tech 為 'search'）
@@ -349,14 +351,17 @@ const Solver = (() => {
   // ---------- 出題 ----------
 
   // minGivens：提示數下限；maxLevel：挖洞時允許的最高技巧等級；minLevel：成品至少要用到的等級
+  // 地獄級不限技巧、不要求對稱（能挖得更乾淨），而且邏輯卡住時至少還要剩 minStuck 個空格，只能靠試誤法
   const SPECS = {
+    beginner: { minGivens: 46, maxLevel: 1, minLevel: 1 },
     easy: { minGivens: 38, maxLevel: 1, minLevel: 1 },
     medium: { minGivens: 28, maxLevel: 1, minLevel: 1 },
     hard: { minGivens: 24, maxLevel: 2, minLevel: 2 },
     expert: { minGivens: 22, maxLevel: 3, minLevel: 3 },
+    hell: { minGivens: 17, maxLevel: SEARCH_LEVEL, minLevel: SEARCH_LEVEL, minStuck: 40, symmetric: false },
   };
 
-  // 先產生完整盤面，再以中心對稱的方式隨機挖洞；每挖一次都確認仍是唯一解且不超過目標難度
+  // 先產生完整盤面，再隨機挖洞（預設中心對稱，一次挖兩格）；每挖一次都確認仍是唯一解且不超過目標難度
   function generate(diff) {
     const spec = SPECS[diff] || SPECS.easy;
     let fallback = null;
@@ -367,7 +372,7 @@ const Solver = (() => {
       for (const i of shuffle([...Array(81).keys()])) {
         if (givens <= spec.minGivens) break;
         if (!puzzle[i]) continue;
-        const j = 80 - i;
+        const j = spec.symmetric === false ? i : 80 - i;
         puzzle[i] = 0;
         puzzle[j] = 0;
         // 邏輯技巧能解完就代表唯一解；最高難度不限技巧，直接檢查解的數量
@@ -381,10 +386,10 @@ const Solver = (() => {
           puzzle[j] = solution[j];
         }
       }
-      const level = grade(puzzle).level;
-      const result = { puzzle, solution, level };
-      if (level >= spec.minLevel) return result;
-      if (!fallback || level > fallback.level) fallback = result;
+      const { level, stuck } = grade(puzzle);
+      const result = { puzzle, solution, level, stuck };
+      if (level >= spec.minLevel && stuck >= (spec.minStuck || 0)) return result;
+      if (!fallback || level > fallback.level || (level === fallback.level && stuck > fallback.stuck)) fallback = result;
     }
     return fallback;
   }
