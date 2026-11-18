@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Auto-Sudoku – Play Sudoku with an AI Autoplay Solver</title>
+<meta name="description" content="Play Sudoku online for free, or watch an AI solve it step by step with human techniques. Get hints, enter your own puzzle, and see which technique each move uses. No ads, no install.">
+<link rel="canonical" href="https://mrdadado.github.io/Auto-Sudoku/">
+<meta name="theme-color" content="#eef4f0">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Auto-Sudoku">
+<meta property="og:url" content="https://mrdadado.github.io/Auto-Sudoku/">
+<meta property="og:title" content="Auto-Sudoku – Play Sudoku with an AI Autoplay Solver">
+<meta property="og:description" content="Play Sudoku in your browser, or let a logic-based AI solve it for you. Hints, custom puzzles, zero dependencies.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Auto-Sudoku – Play Sudoku with an AI Autoplay Solver">
+<meta name="twitter:description" content="Play Sudoku in your browser, or let a logic-based AI solve it for you.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Auto-Sudoku",
+  "url": "https://mrdadado.github.io/Auto-Sudoku/",
+  "description": "Play Sudoku online, or watch an AI solve it step by step. Includes hints, four difficulty levels and a solver for your own puzzles.",
+  "applicationCategory": "GameApplication",
+  "genre": "Puzzle",
+  "operatingSystem": "Any",
+  "browserRequirements": "Requires JavaScript",
+  "inLanguage": ["en", "zh-Hant", "zh-Hans", "ja", "ko"],
+  "isAccessibleForFree": true,
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+  "author": { "@type": "Person", "name": "MrDaDaDo", "url": "https://github.com/MrDaDaDo" },
+  "sameAs": "https://github.com/MrDaDaDo/Auto-Sudoku"
+}
+</script>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background: #eef4f0;
+    color: #33483f;
+    font-family: "Segoe UI", "Microsoft JhengHei", Arial, sans-serif;
+  }
+  .container { width: 480px; max-width: calc(100vw - 32px); margin-top: 32px; }
+  header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+  h1 { font-size: 48px; margin: 0; color: #24443a; }
+  .scores { display: flex; gap: 8px; }
+  .score-box {
+    background: #5e8c7b; color: #fff; border-radius: 6px;
+    padding: 6px 12px; text-align: center; min-width: 68px;
+  }
+  .score-box .label { font-size: 12px; color: #dcebe4; text-transform: uppercase; }
+  .score-box .value { font-size: 20px; font-weight: bold; font-variant-numeric: tabular-nums; }
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .bar-actions { display: flex; gap: 8px; align-items: center; }
+  button {
+    background: #3f8f72; color: #fff; border: none; border-radius: 6px;
+    padding: 10px 18px; font-size: 16px; font-weight: bold; cursor: pointer;
+    font-family: inherit;
+  }
+  button:hover { background: #4fa184; }
+  select, .custom input {
+    padding: 8px; border-radius: 6px; border: none;
+    background: #d9e6de; color: #33483f; font-size: 14px;
+  }
+  select { cursor: pointer; }
+
+  .toolbar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  .custom { display: none; gap: 6px; align-items: center; flex: 1; min-width: 0; }
+  .custom.show { display: flex; }
+  .custom input { flex: 1; min-width: 0; }
+  .custom button { padding: 8px 12px; font-size: 14px; }
+  .custom-msg { margin: -4px 0 12px; font-size: 14px; color: #6c8379; }
+  .custom-msg:empty { display: none; }
+  .custom-msg.error { color: #d63031; font-weight: bold; }
+
+  .board-wrap { position: relative; }
+  /* 9 格之間插入兩條較寬的軌道，當作九宮格的粗框線 */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) 2px repeat(3, minmax(0, 1fr)) 2px repeat(3, minmax(0, 1fr));
+    grid-template-rows: repeat(3, minmax(0, 1fr)) 2px repeat(3, minmax(0, 1fr)) 2px repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    padding: 5px;
+    aspect-ratio: 1;
+    background: #5b7a6e;
+    border-radius: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+  }
+  .cell {
+    display: flex; justify-content: center; align-items: center;
+    border-radius: 2px; background: #fbfdfc;
+    font-size: clamp(16px, 5.6vw, 27px); line-height: 1;
+    cursor: pointer;
+  }
+  .cell.given { color: #24443a; font-weight: bold; }
+  .cell.user { color: #2a7ad1; }
+  .cell.peer { background: #e3efe8; }
+  .cell.same { background: #bfdfcd; }
+  .cell.sel { background: #96d1b3; }
+  .cell.wrong { color: #d63031; background: #fbe1de; }
+  .cell.wrong.sel { background: #f5bdb7; }
+  .cell.hint { outline: 3px solid #f39c12; outline-offset: -3px; animation: pulse 0.9s ease-in-out infinite; }
+  @keyframes pulse { 50% { outline-color: rgba(243, 156, 18, 0.25); } }
+  /* 筆記 / 候選數：每格內再分成 3×3 的小格 */
+  .notes {
+    display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(3, 1fr);
+    width: 100%; height: 100%; padding: 1px;
+    font-size: clamp(7px, 2.3vw, 11px); color: #6c8379;
+  }
+  .notes i { font-style: normal; display: flex; justify-content: center; align-items: center; }
+
+  .overlay {
+    position: absolute; inset: 0; z-index: 10;
+    display: none; flex-direction: column; justify-content: center; align-items: center; gap: 12px;
+    background: rgba(238, 244, 240, 0.55); border-radius: 8px;
+    pointer-events: none;
+  }
+  .overlay.show { display: flex; animation: appear 0.3s ease; }
+  .overlay p {
+    font-size: 40px; font-weight: bold; margin: 0; padding: 8px 24px; border-radius: 8px;
+    background: rgba(255, 255, 255, 0.85); color: #2e8b57;
+  }
+  .overlay button { pointer-events: auto; }
+  @keyframes appear { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  .pad { display: grid; grid-template-columns: repeat(9, 1fr); gap: 6px; margin-top: 12px; }
+  .pad button { padding: 10px 0; font-size: 20px; }
+  .pad button.done { opacity: 0.35; }
+  .tools { display: flex; gap: 8px; margin-top: 8px; }
+  .tools button { flex: 1; padding: 8px; font-size: 14px; }
+  .pad button, .tools button { background: #d9e6de; color: #24443a; }
+  .pad button:hover, .tools button:hover { background: #c8dbd0; }
+  #noteMode.active { background: #e67e22; color: #fff; }
+
+  .ai-panel { margin-top: 16px; background: #d9e6de; border-radius: 8px; padding: 12px 16px; }
+  .ai-buttons { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .ai-buttons button.running { background: #e74c3c; }
+  #aiStatus { margin-left: auto; font-weight: bold; }
+  .stats { margin-top: 8px; font-size: 14px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .stats button { padding: 4px 10px; font-size: 12px; background: #7fa093; }
+  .ai-panel summary { margin-top: 12px; cursor: pointer; font-weight: bold; }
+  .param {
+    display: grid; grid-template-columns: 10rem 1fr 3.5em;
+    align-items: center; gap: 8px; margin-top: 8px;
+  }
+  .param input { width: 100%; accent-color: #3f8f72; }
+  .param .val { text-align: right; font-variant-numeric: tabular-nums; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer; }
+  .check input { accent-color: #3f8f72; width: 16px; height: 16px; }
+  .param-hint { font-size: 12px; color: #6c8379; margin: 2px 0 0; }
+
+  .tip { margin-top: 16px; line-height: 1.6; }
+  .about { margin: 8px 0 32px; line-height: 1.6; }
+  .about h2 { font-size: 20px; margin: 0 0 4px; }
+  .about p { margin: 0; }
+  .about a { color: #3f8f72; font-weight: bold; }
+
+  @media (max-width: 520px) {
+    h1 { font-size: 34px; }
+    .pad { gap: 4px; }
+    .param { grid-template-columns: 7rem 1fr 3em; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <h1>Sudoku</h1>
+    <div class="scores">
+      <div class="score-box"><div class="label" data-i18n="mistakes">Mistakes</div><div class="value" id="mistakes">0</div></div>
+      <div class="score-box"><div class="label" data-i18n="time">Time</div><div class="value" id="time">0:00</div></div>
+      <div class="score-box"><div class="label" data-i18n="best">Best</div><div class="value" id="best">—</div></div>
+    </div>
+  </header>
+  <div class="bar">
+    <span data-i18n-html="intro">Fill every row, column and box with <b>1–9</b>!</span>
+    <div class="bar-actions">
+      <select id="langSelect" aria-label="Language"></select>
+      <button id="newGame" data-i18n="newGame">New Game</button>
+    </div>
+  </div>
+  <div class="toolbar">
+    <select id="diffSelect" aria-label="Difficulty"></select>
+    <div class="custom" id="customBox">
+      <input type="text" id="customInput" inputmode="numeric" autocomplete="off" spellcheck="false">
+      <button id="loadCustom" data-i18n="load">Load</button>
+      <button id="startCustom" data-i18n="start">Start</button>
+    </div>
+  </div>
+  <p class="custom-msg" id="customMsg"></p>
+  <div class="board-wrap">
+    <div class="board" id="board"></div>
+    <div class="overlay" id="overlay">
+      <p data-i18n="win">Solved!</p>
+      <button id="retryBtn" data-i18n="retry">Play again</button>
+    </div>
+  </div>
+  <div class="pad" id="pad"></div>
+  <div class="tools">
+    <button id="undoBtn" data-i18n="undo">Undo</button>
+    <button id="eraseBtn" data-i18n="erase">Erase</button>
+    <button id="noteMode" data-i18n="notes">✏️ Notes</button>
+  </div>
+  <div class="ai-panel">
+    <div class="ai-buttons">
+      <button id="aiToggle">AI Autoplay</button>
+      <button id="hintBtn" data-i18n="hint">Hint</button>
+      <span id="aiStatus"></span>
+    </div>
+    <div class="stats">
+      <span id="stats"></span>
+      <button id="resetStats" data-i18n="resetStats">Reset</button>
+    </div>
+    <details>
+      <summary data-i18n="aiParams">Settings</summary>
+      <div class="param">
+        <label for="delay" data-i18n="param_delay">Delay per move (ms)</label>
+        <input type="range" id="delay" min="0" max="1000" step="10">
+        <span class="val" id="delayVal"></span>
+      </div>
+      <p class="param-hint" data-i18n="hint_delay">Extra wait between moves during autoplay</p>
+      <label class="check"><input type="checkbox" id="autoRestart"><span data-i18n="opt_autoRestart">Auto restart</span></label>
+      <p class="param-hint" data-i18n="hint_autoRestart">Start a new puzzle automatically after each one is solved</p>
+      <label class="check"><input type="checkbox" id="showCands"><span data-i18n="opt_showCands">Show candidates</span></label>
+      <p class="param-hint" data-i18n="hint_showCands">Show the digits that can still go in each empty cell</p>
+      <label class="check"><input type="checkbox" id="autoCheck"><span data-i18n="opt_autoCheck">Highlight mistakes</span></label>
+      <p class="param-hint" data-i18n="hint_autoCheck">Mark wrong digits in red as soon as they are entered</p>
+    </details>
+  </div>
+  <p class="tip" data-i18n-html="tip"><b>How to play:</b> Click a cell, then type <b>1–9</b> or use the number pad. <b>Arrow keys</b> move, <b>Backspace</b> erases, <b>N</b> toggles notes and <b>Ctrl+Z</b> undoes. Press <b>F2</b> for a new game.</p>
+  <section class="about">
+    <h2 data-i18n="aboutTitle">About Auto-Sudoku</h2>
+    <p data-i18n-html="about"></p>
+  </section>
+</div>
+<script src="i18n.js"></script>
+<script src="solver.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
