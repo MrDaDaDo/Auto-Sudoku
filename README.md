@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/og-image.png" alt="Auto-Sudoku: play Sudoku in your browser, or let a logic-based AI solve it for you" width="640">
+
 # Auto-Sudoku
 
 **Sudoku in the browser with a logic-based AI that solves it for you, one technique at a time.**
@@ -13,9 +15,9 @@
 ![Vanilla JS](https://img.shields.io/badge/vanilla-JavaScript-f7df1e.svg?logo=javascript&logoColor=black)
 [![GitHub stars](https://img.shields.io/github/stars/MrDaDaDo/Auto-Sudoku?style=social)](https://github.com/MrDaDaDo/Auto-Sudoku/stargazers)
 
-<img src="assets/demo.gif" alt="The AI solving an Expert puzzle with candidates shown" width="400">
+<img src="assets/demo.gif" alt="The AI solving a Hell puzzle with candidates shown" width="400">
 
-<sub>The AI solving an Expert puzzle one cell at a time, with candidates shown and the technique of each move</sub>
+<sub>The AI solving a Hell puzzle (25 givens) one cell at a time, with candidates shown and the technique of each move</sub>
 
 </div>
 
@@ -62,7 +64,7 @@ The solver keeps a set of **candidates** (the digits that can still go there) fo
 
 Singles place a digit; the other techniques only remove candidates, and the solver keeps applying them until a single appears. Each AI move fills exactly one cell and is labelled with the hardest technique it needed.
 
-<img src="assets/screenshot.png" alt="An Expert puzzle mid-solve, right after an XY-Wing move" width="400">
+<img src="assets/screenshot.png" alt="A Hell puzzle mid-solve, right after a trial-and-error move" width="400">
 
 If logic runs out (which happens on **Hell** puzzles and can happen on a **custom puzzle**), the solver falls back to a **backtracking search** that always branches on the cell with the fewest candidates, and the move is labelled *Trial and error*. The same search checks that a custom puzzle has exactly one solution before the game starts.
 
