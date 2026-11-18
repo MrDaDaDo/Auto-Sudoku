@@ -98,6 +98,13 @@ solver.js    Human-technique Sudoku solver, backtracking search and puzzle gener
 i18n.js      Translations and language switching
 ```
 
+## More Auto Games
+
+- [Auto-2048](https://github.com/MrDaDaDo/Auto-2048) – 2048 with a tunable Expectimax AI
+- [Auto-Minesweeper](https://github.com/MrDaDaDo/Auto-Minesweeper) – Minesweeper with an exact-probability AI solver
+
+Play them all at https://mrdadado.github.io/
+
 ## License
 
 Released into the public domain under [The Unlicense](LICENSE).
