@@ -43,6 +43,15 @@
   "sameAs": "https://github.com/MrDaDaDo/Auto-Sudoku"
 }
 </script>
+<script>
+  // 在畫面出現前決定主題：使用者選過就用選的，否則跟隨系統設定
+  (() => {
+    let saved = null;
+    try { saved = localStorage.getItem('autoGamesTheme'); } catch { /* 忽略 */ }
+    const dark = saved ? saved === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+    document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+  })();
+</script>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -179,6 +188,33 @@
     .pad { gap: 4px; }
     .param { grid-template-columns: 7rem 1fr 3em; }
   }
+  #themeToggle { padding: 0 10px; font-size: 18px; background: #d9e6de; }
+
+  /* 深色主題 */
+  [data-theme="dark"] body { background: #141b18; color: #c3d5cc; }
+  [data-theme="dark"] h1 { color: #e3f1ea; }
+  [data-theme="dark"] .score-box { background: #3d5c50; }
+  [data-theme="dark"] select, [data-theme="dark"] .custom input, [data-theme="dark"] #themeToggle, [data-theme="dark"] .ai-panel { background: #22302a; color: #c3d5cc; }
+  [data-theme="dark"] .custom-msg { color: #8fa89c; }
+  [data-theme="dark"] .custom-msg.error { color: #ff7b72; }
+  [data-theme="dark"] .board { background: #44594f; }
+  [data-theme="dark"] .cell { background: #1a2420; }
+  [data-theme="dark"] .cell.given { color: #e3f1ea; }
+  [data-theme="dark"] .cell.user { color: #6db3f2; }
+  [data-theme="dark"] .cell.peer { background: #223029; }
+  [data-theme="dark"] .cell.same { background: #2d4a3c; }
+  [data-theme="dark"] .cell.sel { background: #3b6b55; }
+  [data-theme="dark"] .cell.wrong { color: #ff7b72; background: #4a2622; }
+  [data-theme="dark"] .cell.wrong.sel { background: #6a322c; }
+  [data-theme="dark"] .notes { color: #8fa89c; }
+  [data-theme="dark"] .overlay { background: rgba(20, 27, 24, 0.55); }
+  [data-theme="dark"] .overlay p { background: rgba(34, 48, 42, 0.92); color: #5fce8a; }
+  [data-theme="dark"] .pad button, [data-theme="dark"] .tools button { background: #22302a; color: #e3f1ea; }
+  [data-theme="dark"] .pad button:hover, [data-theme="dark"] .tools button:hover { background: #2d4037; }
+  [data-theme="dark"] #noteMode.active { background: #e67e22; color: #fff; }
+  [data-theme="dark"] .stats button { background: #4a6a5c; }
+  [data-theme="dark"] .param-hint { color: #8fa89c; }
+  [data-theme="dark"] .about a { color: #6fc2a0; }
 </style>
 </head>
 <body>
@@ -189,6 +225,7 @@
       <div class="score-box"><div class="label" data-i18n="mistakes">Mistakes</div><div class="value" id="mistakes">0</div></div>
       <div class="score-box"><div class="label" data-i18n="time">Time</div><div class="value" id="time">0:00</div></div>
       <div class="score-box"><div class="label" data-i18n="best">Best</div><div class="value" id="best">—</div></div>
+      <button id="themeToggle" aria-label="Toggle dark theme"></button>
     </div>
   </header>
   <div class="bar">
@@ -254,6 +291,35 @@
     <p data-i18n-html="more">More games that play themselves: <a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a> and <a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>. See them all at <a href="https://mrdadado.github.io/">Auto Games</a>.</p>
   </section>
 </div>
+<script>
+  // 主題切換：選擇存在 localStorage，同網域的其他 Auto Games 共用
+  (() => {
+    const KEY = 'autoGamesTheme';
+    const COLORS = { light: '#eef4f0', dark: '#141b18' };
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const meta = document.querySelector('meta[name="theme-color"]');
+    const query = matchMedia('(prefers-color-scheme: dark)');
+    const show = () => {
+      btn.textContent = root.dataset.theme === 'dark' ? '☀️' : '🌙';
+      if (meta) meta.content = COLORS[root.dataset.theme];
+    };
+    btn.addEventListener('click', () => {
+      root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark';
+      try { localStorage.setItem(KEY, root.dataset.theme); } catch { /* 忽略 */ }
+      show();
+    });
+    // 沒有手動選過時，系統設定改變就跟著變
+    query.addEventListener('change', () => {
+      let saved = null;
+      try { saved = localStorage.getItem(KEY); } catch { /* 忽略 */ }
+      if (saved) return;
+      root.dataset.theme = query.matches ? 'dark' : 'light';
+      show();
+    });
+    show();
+  })();
+</script>
 <script src="i18n.js"></script>
 <script src="solver.js"></script>
 <script src="game.js"></script>

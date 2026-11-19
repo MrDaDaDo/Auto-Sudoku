@@ -35,6 +35,7 @@ A dependency-free browser version of **Sudoku** with a built-in **AI solver** th
 - **Custom puzzle**: type or paste any Sudoku (81 digits, `0` or `.` for empty cells) and let the AI solve it
 - **Highlight mistakes**, mistake counter, timer and **best times** per difficulty
 - **Auto restart + stats**: let the AI solve puzzle after puzzle and count how many it has solved
+- **Light and dark themes**: follows your system setting, with a toggle that is remembered across all Auto Games
 - **Multilingual UI**: English, 繁體中文, 简体中文, 日本語, 한국어 (auto-detected from the browser, selection remembered)
 - Settings, best times and AI stats saved in `localStorage`
 
