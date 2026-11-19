@@ -103,6 +103,7 @@ i18n.js      Translations and language switching
 
 - [Auto-2048](https://github.com/MrDaDaDo/Auto-2048) – 2048 with a tunable Expectimax AI
 - [Auto-Minesweeper](https://github.com/MrDaDaDo/Auto-Minesweeper) – Minesweeper with an exact-probability AI solver
+- [Auto-Blocks](https://github.com/MrDaDaDo/Auto-Blocks) – Falling-block puzzle with a tunable AI that stacks and clears lines
 
 Play them all at https://mrdadado.github.io/
 

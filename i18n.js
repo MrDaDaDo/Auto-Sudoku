@@ -71,7 +71,7 @@ const I18N = (() => {
       stats: 'AI record on this difficulty: {n} solved',
       statsNone: 'AI record on this difficulty: none yet',
       tip: '<b>How to play:</b> Click a cell, then type <b>1–9</b> or use the number pad. <b>Arrow keys</b> move, <b>Backspace</b> erases, <b>N</b> toggles notes and <b>Ctrl+Z</b> undoes. Press <b>F2</b> for a new game.',
-      more: 'More games that play themselves: <a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a> and <a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>. See them all at <a href="https://mrdadado.github.io/">Auto Games</a>.',
+      more: 'More games that play themselves: <a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>, <a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a> and <a href="https://mrdadado.github.io/Auto-Blocks/">Auto-Blocks</a>. See them all at <a href="https://mrdadado.github.io/">Auto Games</a>.',
 
       aboutTitle: 'About Auto-Sudoku',
       about: `Auto-Sudoku is a free, open-source Sudoku game with a built-in AI solver. Press <b>AI Autoplay</b> to watch it fill the grid one cell at a time, or press <b>Hint</b> to see the next cell it would fill. The AI solves like a person does: it looks for <b>singles</b> first, then narrows the candidates with locked candidates, pairs, triples, X-Wing, XY-Wing and Swordfish, and shows <b>which technique</b> each move needed. Every generated puzzle has exactly one solution, and from <b>Beginner</b> to <b>Expert</b> it can be solved by logic alone; <b>Hell</b> puzzles go beyond these techniques and need trial and error. Choose <b>Custom puzzle</b> to enter any Sudoku and let the AI solve it. Source code on ${REPO}.`,
@@ -134,7 +134,7 @@ const I18N = (() => {
       stats: '此難度 AI 戰績：已解 {n} 題',
       statsNone: '此難度 AI 戰績：尚無紀錄',
       tip: '<b>操作方式：</b>點選格子後按 <b>1–9</b> 或使用下方數字鍵填入。<b>方向鍵</b> 移動，<b>Backspace</b> 清除，<b>N</b> 切換筆記，<b>Ctrl+Z</b> 復原。按 <b>F2</b> 開新局。',
-      more: '更多會自己玩的遊戲：<a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>、<a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>。全部遊戲都在 <a href="https://mrdadado.github.io/">Auto Games</a>。',
+      more: '更多會自己玩的遊戲：<a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>、<a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>、<a href="https://mrdadado.github.io/Auto-Blocks/">Auto-Blocks</a>。全部遊戲都在 <a href="https://mrdadado.github.io/">Auto Games</a>。',
 
       aboutTitle: '關於 Auto-Sudoku',
       about: `Auto-Sudoku 是免費、開源的數獨遊戲，內建 AI 求解器。按 <b>AI 自動玩</b> 看它一格一格填完，或按 <b>提示</b> 查看它下一步會填哪一格。AI 的解法和人一樣：先找<b>唯一數</b>，再用區塊排除、數對、三數組、X-Wing、XY-Wing、劍魚等技巧刪去候選數，並顯示每一步用到<b>哪一種技巧</b>。產生的每一題都只有唯一解，從<b>入門</b>到<b>專家</b>只靠邏輯推理就能解完；<b>地獄</b>難度則超出這些技巧，必須用試誤法。選擇 <b>自訂題目</b> 可以輸入任何數獨讓 AI 來解。原始碼在 ${REPO}。`,
@@ -197,7 +197,7 @@ const I18N = (() => {
       stats: '此难度 AI 战绩：已解 {n} 题',
       statsNone: '此难度 AI 战绩：暂无记录',
       tip: '<b>操作方式：</b>点选格子后按 <b>1–9</b> 或使用下方数字键填入。<b>方向键</b> 移动，<b>Backspace</b> 清除，<b>N</b> 切换笔记，<b>Ctrl+Z</b> 撤销。按 <b>F2</b> 开新局。',
-      more: '更多会自己玩的游戏：<a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>、<a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>。全部游戏都在 <a href="https://mrdadado.github.io/">Auto Games</a>。',
+      more: '更多会自己玩的游戏：<a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>、<a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>、<a href="https://mrdadado.github.io/Auto-Blocks/">Auto-Blocks</a>。全部游戏都在 <a href="https://mrdadado.github.io/">Auto Games</a>。',
 
       aboutTitle: '关于 Auto-Sudoku',
       about: `Auto-Sudoku 是免费、开源的数独游戏，内置 AI 求解器。按 <b>AI 自动玩</b> 看它一格一格填完，或按 <b>提示</b> 查看它下一步会填哪一格。AI 的解法和人一样：先找<b>唯一数</b>，再用区块排除、数对、三数组、X-Wing、XY-Wing、剑鱼等技巧删去候选数，并显示每一步用到<b>哪一种技巧</b>。生成的每一题都只有唯一解，从<b>入门</b>到<b>专家</b>只靠逻辑推理就能解完；<b>地狱</b>难度则超出这些技巧，必须用试错法。选择 <b>自定义题目</b> 可以输入任何数独让 AI 来解。源代码在 ${REPO}。`,
@@ -260,7 +260,7 @@ const I18N = (() => {
       stats: 'この難易度での AI の戦績：{n} 問クリア',
       statsNone: 'この難易度での AI の戦績：まだありません',
       tip: '<b>遊び方：</b>マスを選び、<b>1–9</b> のキーか下の数字ボタンで入力します。<b>矢印キー</b>で移動、<b>Backspace</b> で消去、<b>N</b> でメモ切り替え、<b>Ctrl+Z</b> で元に戻します。<b>F2</b> で新しいゲーム。',
-      more: 'ほかの自動プレイゲーム：<a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>、<a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>。一覧は <a href="https://mrdadado.github.io/">Auto Games</a> へ。',
+      more: 'ほかの自動プレイゲーム：<a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>、<a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>、<a href="https://mrdadado.github.io/Auto-Blocks/">Auto-Blocks</a>。一覧は <a href="https://mrdadado.github.io/">Auto Games</a> へ。',
 
       aboutTitle: 'Auto-Sudoku について',
       about: `Auto-Sudoku は AI ソルバーを内蔵した無料・オープンソースの数独です。<b>AI 自動プレイ</b>で AI が1マスずつ埋めていく様子を観戦したり、<b>ヒント</b>で次に埋めるマスを確認できます。AI は人と同じように解きます。まず<b>シングル</b>を探し、次にロックされた候補、ペア、トリプル、X-Wing、XY-Wing、ソードフィッシュで候補を絞り込み、各手に<b>どの解法</b>が必要だったかを表示します。生成される問題はすべて解が1つだけで、<b>入門</b>から<b>エキスパート</b>までは論理だけで解けます。<b>地獄</b>はこれらの解法では足りず、試行錯誤が必要です。<b>自分の問題</b>を選ぶと、好きな数独を入力して AI に解かせることができます。ソースコードは ${REPO} にあります。`,
@@ -323,7 +323,7 @@ const I18N = (() => {
       stats: '이 난이도의 AI 전적: {n}문제 해결',
       statsNone: '이 난이도의 AI 전적: 아직 없음',
       tip: '<b>플레이 방법:</b> 칸을 선택한 뒤 <b>1–9</b> 키나 아래 숫자 버튼으로 입력합니다. <b>방향키</b>로 이동, <b>Backspace</b>로 지우기, <b>N</b>으로 메모 전환, <b>Ctrl+Z</b>로 실행 취소. <b>F2</b>로 새 게임.',
-      more: '스스로 플레이하는 다른 게임: <a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>, <a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>. 전체 목록은 <a href="https://mrdadado.github.io/">Auto Games</a>에서 볼 수 있습니다.',
+      more: '스스로 플레이하는 다른 게임: <a href="https://mrdadado.github.io/Auto-2048/">Auto-2048</a>, <a href="https://mrdadado.github.io/Auto-Minesweeper/">Auto-Minesweeper</a>, <a href="https://mrdadado.github.io/Auto-Blocks/">Auto-Blocks</a>. 전체 목록은 <a href="https://mrdadado.github.io/">Auto Games</a>에서 볼 수 있습니다.',
 
       aboutTitle: 'Auto-Sudoku 소개',
       about: `Auto-Sudoku는 AI 솔버가 내장된 무료 오픈 소스 스도쿠 게임입니다. <b>AI 자동 플레이</b>를 눌러 AI가 한 칸씩 채워 가는 모습을 보거나 <b>힌트</b>로 다음에 채울 칸을 확인하세요. AI는 사람처럼 풉니다. 먼저 <b>싱글</b>을 찾고, 잠긴 후보, 페어, 트리플, X-Wing, XY-Wing, 스워드피시로 후보를 줄이며, 각 수에 <b>어떤 기법</b>이 필요했는지 보여 줍니다. 생성되는 모든 문제는 해가 하나뿐이며, <b>입문</b>부터 <b>전문가</b>까지는 논리만으로 풀 수 있습니다. <b>지옥</b>은 이 기법들로는 부족해 시행착오가 필요합니다. <b>직접 입력</b>을 선택하면 원하는 스도쿠를 입력해 AI에게 풀게 할 수 있습니다. 소스 코드는 ${REPO}에 있습니다.`,
